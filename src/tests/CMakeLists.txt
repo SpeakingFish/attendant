@@ -1,4 +1,4 @@
-set(TARGET crash_tests)
+set(TARGET crash-tests)
 
 cmake_minimum_required(VERSION 2.6)
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)

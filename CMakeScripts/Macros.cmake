@@ -28,7 +28,7 @@ macro(kmpx_project_add_library)
     add_library(${ARGV})
     set_target_properties(${ARGV0}
         PROPERTIES
-        OUTPUT_NAME ${ARGV0}${DEBUG_SUFFIX}
+        OUTPUT_NAME ${KMPX_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
     )
 endmacro()
 
@@ -36,7 +36,7 @@ macro(kmpx_project_add_executable)
     add_executable(${ARGV})
     set_target_properties(${ARGV0}
         PROPERTIES
-        OUTPUT_NAME ${ASU_NAME}-${ARGV0}${DEBUG_SUFFIX}
+        OUTPUT_NAME ${KMPX_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
     )
 endmacro()
 
@@ -70,20 +70,20 @@ macro(kmpx_project_install)
     endif()
 
     if(target_type STREQUAL "EXECUTABLE")
-        smart_copy(${target_location} ${ASU_INSTALL_ROOT}/bin/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/bin/${target_filename} ${binary_install_flags})
     endif()
     if(target_type STREQUAL "STATIC_LIBRARY")
-        smart_copy(${target_location} ${ASU_INSTALL_ROOT}/lib/${ASU_NAME}/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/lib/${KMPX_PROJECT_NAME}/${target_filename} ${binary_install_flags})
     endif()
     if(target_type STREQUAL "SHARED_LIBRARY")
-        smart_copy(${target_location} ${ASU_INSTALL_ROOT}/lib/${ASU_NAME}/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/lib/${KMPX_PROJECT_NAME}/${target_filename} ${binary_install_flags})
     endif()
 
     if (${ARGC} GREATER 2)
         set (headers_sub_dir ${ARGV1})
         set (instaled_headers ${${ARGV2}})
         foreach (f ${instaled_headers})
-            set(destination_name ${ASU_INSTALL_ROOT}/include/${ASU_NAME}/${headers_sub_dir}/${f})
+            set(destination_name ${KMPX_PROJECT_INSTALL_ROOT}/include/${KMPX_PROJECT_NAME}/${headers_sub_dir}/${f})
             smart_copy(${CMAKE_CURRENT_SOURCE_DIR}/${f} ${destination_name} ${binary_install_flags})
         endforeach(f)
      endif()

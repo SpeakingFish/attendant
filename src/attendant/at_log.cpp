@@ -137,3 +137,36 @@ void at_log_buffer_t::set_output_handler(at_log_handler_t* handler)
 	}
 	temp_storage_.clear();
 }
+
+
+at_log_stream_t& at_log_stream_t::operator<<(const QString& str)
+{
+	if (QCoreApplication::instance() != NULL)
+	{
+		*stream_ << str.toLocal8Bit().data();
+	}
+	else
+	{
+		*stream_ << str.toLatin1().data();
+	}
+	return *this;
+}
+
+at_log_stream_t& at_log_stream_t::operator<<(const QStringRef& str)
+{
+	if (QCoreApplication::instance() != NULL)
+	{
+		*stream_ << str.toLocal8Bit().data();
+	}
+	else
+	{
+		*stream_ << str.toLatin1().data();
+	}
+	return *this;
+}
+
+at_log_stream_t& at_log_stream_t::operator<<(const QByteArray& str)
+{
+	*stream_ << str.data();
+	return *this;
+}

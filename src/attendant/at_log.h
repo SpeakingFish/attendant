@@ -82,23 +82,9 @@
 		at_log_stream_t(at_log_level_t level, const QByteArray& category);
 		~at_log_stream_t();
 
-		at_log_stream_t& operator<<(const QString& str)
-		{
-			*stream_ << str.toLocal8Bit().data();
-			return *this;
-		}
-
-		at_log_stream_t& operator<<(const QStringRef& str)
-		{
-			*stream_ << str.toLocal8Bit().data();
-			return *this;
-		}
-
-		at_log_stream_t& operator<<(const QByteArray& str)
-		{
-			*stream_ << str.data();
-			return *this;
-		}
+		at_log_stream_t& operator<<(const QString& str);
+		at_log_stream_t& operator<<(const QStringRef& str);
+		at_log_stream_t& operator<<(const QByteArray& str);
 
 		template <typename T> at_log_stream_t& operator<<(const T& t)
 		{
