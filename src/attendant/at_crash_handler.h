@@ -1,8 +1,8 @@
 #pragma once
 
 #ifdef __WIN32__
-#include <windows.h>
 #include <excpt.h>
+#include <windows.h>
 #endif
 
 #include <stdio.h>

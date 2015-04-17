@@ -21,6 +21,7 @@
 		#define AT_LOG          AT_LOG_NOOP__
 		#define AT_LOG_DEBUG    AT_LOG_NOOP__
 		#define AT_LOG_INFO     AT_LOG_NOOP__
+		#define AT_LOG_EVENT    AT_LOG_NOOP__
 		#define AT_LOG_WARNING  AT_LOG_NOOP__
 		#define AT_LOG_MESSAGE  AT_LOG_NOOP__
 		#define AT_LOG_CRITICAL AT_LOG_NOOP__
@@ -29,6 +30,7 @@
 		#define AT_LOG_FUNC          AT_LOG_NOOP__
 		#define AT_LOG_FUNC_DEBUG    AT_LOG_NOOP__
 		#define AT_LOG_FUNC_INFO     AT_LOG_NOOP__
+		#define AT_LOG_FUNC_EVENT    AT_LOG_NOOP__
 		#define AT_LOG_FUNC_WARNING  AT_LOG_NOOP__
 		#define AT_LOG_FUNC_MESSAGE  AT_LOG_NOOP__
 		#define AT_LOG_FUNC_CRITICAL AT_LOG_NOOP__
@@ -47,6 +49,7 @@
 		#define AT_LOG          AT_LOG_CATEGORY__(AT_LOG_CATEGORY, AT_LOG_LEVEL_DEFAULT)
 		#define AT_LOG_DEBUG    AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_debug)
 		#define AT_LOG_INFO     AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_info)
+		#define AT_LOG_EVENT    AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_event)
 		#define AT_LOG_WARNING  AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_warning)
 		#define AT_LOG_MESSAGE  AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_message)
 		#define AT_LOG_CRITICAL AT_LOG_CATEGORY__(AT_LOG_CATEGORY, at_log_level_critical)
@@ -55,6 +58,7 @@
 		#define AT_LOG_FUNC          (AT_LOG          << __PRETTY_FUNCTION__)
 		#define AT_LOG_FUNC_DEBUG    (AT_LOG_DEBUG    << __PRETTY_FUNCTION__)
 		#define AT_LOG_FUNC_INFO     (AT_LOG_INFO     << __PRETTY_FUNCTION__)
+		#define AT_LOG_FUNC_EVENT    (AT_LOG_EVENT    << __PRETTY_FUNCTION__)
 		#define AT_LOG_FUNC_WARNING  (AT_LOG_WARNING  << __PRETTY_FUNCTION__)
 		#define AT_LOG_FUNC_MESSAGE  (AT_LOG_MESSAGE  << __PRETTY_FUNCTION__)
 		#define AT_LOG_FUNC_CRITICAL (AT_LOG_CRITICAL << __PRETTY_FUNCTION__)
@@ -66,10 +70,11 @@
 	{
 		at_log_level_debug    = 1,
 		at_log_level_info     = 2,
-		at_log_level_warning  = 3,
-		at_log_level_message  = 4,
-		at_log_level_critical = 5,
-		at_log_level_fatal    = 6,
+		at_log_level_event    = 3,
+		at_log_level_warning  = 4,
+		at_log_level_message  = 5,
+		at_log_level_critical = 6,
+		at_log_level_fatal    = 7,
 	};
 
 	class at_log_stream_t;

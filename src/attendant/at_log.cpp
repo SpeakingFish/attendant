@@ -84,6 +84,9 @@ void at_log_t::default_log_handler(at_log_level_t level, const QByteArray& categ
 	case at_log_level_info:
 		file.write(QString("%2 [%3] Info: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
 		break;
+	case at_log_level_event:
+		file.write(QString("%2 [%3] Event: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		break;
 	case at_log_level_warning:
 		file.write(QString("%2 [%3] Warning: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
 		break;
