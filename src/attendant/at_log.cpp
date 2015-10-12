@@ -2,9 +2,14 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
+#include <QtCore/QThreadPool>
 
+#include "qgzip.h"
+
+#define MAX_LOG_FILE_SIZE 2*1024*1024
 
 // enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMsg = QtCriticalMsg };
 
@@ -64,15 +69,58 @@ void at_log_t::set_log_handler(at_log_handler_t* handler)
 	log_handler_ = handler;
 }
 
+class log_zipper_t : public QRunnable
+{
+public:
+	log_zipper_t(const QString& file_name)
+		: file_name_(file_name)
+	{
+
+	}
+
+	virtual void run()
+    {
+		const QString zip_file_name = file_name_ + ".gz";
+		QFile infile(file_name_);
+		QFile outfile(zip_file_name);
+		infile.open(QIODevice::ReadOnly);
+		outfile.open(QIODevice::WriteOnly);
+		const QByteArray uncompressed_data = infile.readAll();
+		QByteArray compressed_data;
+		qgzip_t::compress(uncompressed_data, compressed_data, 9);
+		outfile.write(compressed_data);
+		infile.close();
+		outfile.close();
+		QDir().remove(file_name_);
+	}
+
+	QString file_name_;
+};
+
 void at_log_t::default_log_handler(at_log_level_t level, const QByteArray& category, const QString& text)
 {
 	static std::unique_ptr<QString> file_name;
 	if (file_name.get() == NULL)
 	{
-		file_name.reset(new QString(QCoreApplication::arguments()[0] + ".log"));
+		const QString log_path = QCoreApplication::instance()->property("log_path").toString();
+		const QString log_name = QCoreApplication::instance()->property("log_name").toString();
+		if (!QDir().exists(log_path))
+		{
+			QDir().mkpath(log_path);
+		}
+		file_name.reset(new QString(log_path + "/" + log_name + ".log"));
 	}
-	QFile file(*file_name);
-	if (!file.open(QIODevice::Append))
+	std::unique_ptr<QFile> file(new QFile(*file_name));
+	if (file->size() > MAX_LOG_FILE_SIZE)
+	{
+		const QString archived_file_name = *file_name + "." + QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss");
+		file->rename(archived_file_name);
+		file.reset(new QFile(*file_name));
+
+		log_zipper_t* log_zipper = new log_zipper_t(archived_file_name);
+		QThreadPool::globalInstance()->start(log_zipper);
+	}
+	if (!file->open(QIODevice::Append))
 	{
 		return;
 	}

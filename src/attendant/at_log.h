@@ -117,6 +117,8 @@
 	private:
 		at_log_t();
 
+		static void zip_log(const QString& filename);
+
 	private:
 		static std::unique_ptr<at_log_t> instance_;
 		static at_log_handler_t* log_handler_;
