@@ -17,6 +17,7 @@ set(HEADERS
 	at_assert.h
 	at_crash_handler.h
 	at_log.h
+	qgzip.h
 )
 
 set(ALL_HEADERS
@@ -27,6 +28,7 @@ set(ALL_HEADERS
 set(SOURCES
 	at_crash_handler.cpp
 	at_log.cpp
+	qgzip.cpp
 )
 
 kmpx_project_add_library(${TARGET}
