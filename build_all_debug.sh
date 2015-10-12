@@ -8,7 +8,7 @@ else
     rm -fr $OUTPUT_DIR
     mkdir $OUTPUT_DIR
     cd $OUTPUT_DIR
-    cmake -D CMAKE_BUILD_TYPE=Debug -D INSTALL_TYPE=Symlinks ..
+    cmake -D CMAKE_BUILD_TYPE=Debug -D INSTALL_TYPE=Symlinks -Wno-dev ..
     make --jobs=4
     cd -
 fi
