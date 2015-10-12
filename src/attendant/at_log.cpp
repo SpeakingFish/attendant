@@ -77,31 +77,37 @@ void at_log_t::default_log_handler(at_log_level_t level, const QByteArray& categ
 		return;
 	}
 
+	QFile* file_ptr = file.get();
+	auto file_writer = [file_ptr, &text, &category] (const QString& mask)
+	{
+		file_ptr->write(QString(mask).arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toAscii());
+	};
+
 	switch (level) {
 	case at_log_level_debug:
-		file.write(QString("%2 [%3] Debug: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Debug: %1\n");
 		break;
 	case at_log_level_info:
-		file.write(QString("%2 [%3] Info: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Info: %1\n");
 		break;
 	case at_log_level_event:
-		file.write(QString("%2 [%3] Event: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Event: %1\n");
 		break;
 	case at_log_level_warning:
-		file.write(QString("%2 [%3] Warning: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Warning: %1\n");
 		break;
 	case at_log_level_message:
-		file.write(QString("%2 [%3] Message: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Message: %1\n");
 		break;
 	case at_log_level_critical:
-		file.write(QString("%2 [%3] Critical: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
+		file_writer("%2 [%3] Critical: %1\n");
 		break;
 	case at_log_level_fatal:
-		file.write(QString("%2 [%3] Fatal: %1\n").arg(text).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(QString::fromAscii(category)).toUtf8());
-		file.close(); // закрываем файл
+		file_writer("%2 [%3] Fatal: %1\n");
+		file->close(); // закрываем файл
 		exit(42);
 	}
-	file.close(); // закрываем файл
+	file->close(); // закрываем файл
 }
 
 at_log_stream_t::at_log_stream_t(at_log_level_t level, const QByteArray& category)
