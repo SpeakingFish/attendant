@@ -1,5 +1,6 @@
 #include "at_log.h"
 
+#include <QtCore/QAtomicInt>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
@@ -97,13 +98,51 @@ public:
 	QString file_name_;
 };
 
+class recursion_guard_t
+{
+public:
+	recursion_guard_t(QAtomicInt& recursion_level)
+		: _recursion_level(recursion_level)
+	{
+		_recursion_level.fetchAndAddAcquire(1);
+	}
+	~recursion_guard_t()
+	{
+		_recursion_level.fetchAndAddAcquire(-1);
+	}
+
+	int level() const
+	{
+		return _recursion_level;
+	}
+private:
+	QAtomicInt& _recursion_level;
+};
+
 void at_log_t::default_log_handler(at_log_level_t level, const QByteArray& category, const QString& text)
 {
 	static std::unique_ptr<QString> file_name;
+	static QAtomicInt recursion_level = 0;
+	recursion_guard_t guard = recursion_guard_t(recursion_level);
+
+	if (guard.level() > 2)
+	{
+		return;
+	}
+
 	if (file_name.get() == NULL)
 	{
-		const QString log_path = QCoreApplication::instance()->property("log_path").toString();
-		const QString log_name = QCoreApplication::instance()->property("log_name").toString();
+		static QString log_path = QCoreApplication::instance()->property("log_path").toString();
+		if (log_path.isEmpty())
+		{
+			log_path = QFileInfo(QCoreApplication::instance()->arguments().first()).absoluteDir().absolutePath() + "/../log";
+		}
+		static QString log_name = QCoreApplication::instance()->property("log_name").toString();
+		if (log_name.isEmpty())
+		{
+			log_name = QCoreApplication::instance()->applicationName();
+		}
+
 		if (!QDir().exists(log_path))
 		{
 			QDir().mkpath(log_path);
