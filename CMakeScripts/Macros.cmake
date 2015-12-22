@@ -18,25 +18,25 @@ macro(project_module)
     endif()
 endmacro()
 
-macro(kmpx_project_image)
+macro(attendant_project_image)
     add_custom_target(image
         COMMAND cmake -DCMAKE_INSTALL_PREFIX=`pwd`/image ${CMAKE_HOME_DIRECTORY} && make install
     )
 endmacro()
 
-macro(kmpx_project_add_library)
+macro(attendant_project_add_library)
     add_library(${ARGV})
     set_target_properties(${ARGV0}
         PROPERTIES
-        OUTPUT_NAME ${KMPX_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
+        OUTPUT_NAME ${ATT_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
     )
 endmacro()
 
-macro(kmpx_project_add_executable)
+macro(attendant_project_add_executable)
     add_executable(${ARGV})
     set_target_properties(${ARGV0}
         PROPERTIES
-        OUTPUT_NAME ${KMPX_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
+        OUTPUT_NAME ${ATT_PROJECT_NAME}-${ARGV0}${DEBUG_SUFFIX}
     )
 endmacro()
 
@@ -59,7 +59,7 @@ macro(smart_copy)
     ")
 endmacro()
 
-macro(kmpx_project_install)
+macro(attendant_project_install)
     get_target_property(target_location ${ARGV0} LOCATION)
     get_target_property(target_type ${ARGV0} TYPE)
     get_filename_component(target_filename ${target_location} NAME)
@@ -70,27 +70,27 @@ macro(kmpx_project_install)
     endif()
 
     if(target_type STREQUAL "EXECUTABLE")
-        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/bin/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${ATT_PROJECT_INSTALL_ROOT}/bin/${target_filename} ${binary_install_flags})
     endif()
     if(target_type STREQUAL "STATIC_LIBRARY")
-        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/lib/${KMPX_PROJECT_NAME}/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${ATT_PROJECT_INSTALL_ROOT}/lib/${ATT_PROJECT_NAME}/${target_filename} ${binary_install_flags})
     endif()
     if(target_type STREQUAL "SHARED_LIBRARY")
-        smart_copy(${target_location} ${KMPX_PROJECT_INSTALL_ROOT}/lib/${KMPX_PROJECT_NAME}/${target_filename} ${binary_install_flags})
+        smart_copy(${target_location} ${ATT_PROJECT_INSTALL_ROOT}/lib/${ATT_PROJECT_NAME}/${target_filename} ${binary_install_flags})
     endif()
 
     if (${ARGC} GREATER 2)
         set (headers_sub_dir ${ARGV1})
         set (instaled_headers ${${ARGV2}})
         foreach (f ${instaled_headers})
-            set(destination_name ${KMPX_PROJECT_INSTALL_ROOT}/include/${KMPX_PROJECT_NAME}/${headers_sub_dir}/${f})
+            set(destination_name ${ATT_PROJECT_INSTALL_ROOT}/include/${ATT_PROJECT_NAME}/${headers_sub_dir}/${f})
             smart_copy(${CMAKE_CURRENT_SOURCE_DIR}/${f} ${destination_name} ${binary_install_flags})
         endforeach(f)
      endif()
 
 endmacro()
 
-macro(kmpx_project_install_shares)
+macro(attendant_project_install_shares)
     if (${ARGC} GREATER 1)
         file(GLOB_RECURSE shares RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0} ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}/*)
         set (shares_dest_sub_dir ${ARGV1})
@@ -98,7 +98,7 @@ macro(kmpx_project_install_shares)
         foreach (f ${shares})
             get_filename_component(share_name ${f} NAME)
             get_filename_component(share_path ${f} PATH)
-            set(destination_name ${KMPX_PROJECT_INSTALL_ROOT}/share/${KMPX_PROJECT_NAME}/${shares_dest_sub_dir}/${share_name})
+            set(destination_name ${ATT_PROJECT_INSTALL_ROOT}/share/${ATT_PROJECT_NAME}/${shares_dest_sub_dir}/${share_name})
 
             if (INSTALL_SYMLINKS)
                 smart_copy(${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}/${f} ${destination_name} "-sfvr")

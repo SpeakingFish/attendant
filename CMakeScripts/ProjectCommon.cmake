@@ -20,9 +20,9 @@ endif()
 
 set(CMAKE_MODULE_PATH ${PROJECT_ROOT}/CMakeScripts/ ${CMAKE_MODULE_PATH})
 set(PROJECT_SRC ${PROJECT_ROOT}/src/attendant)
-set(KMPX_PROJECT_INSTALL_ROOT "/tmp/kmpx/usr")
-set(KMPX_PROJECT_TMP_ROOT "/tmp")
-set(KMPX_PROJECT_NAME "kmpx")
+set(ATT_PROJECT_INSTALL_ROOT "/tmp/attendant/usr")
+set(ATT_PROJECT_TMP_ROOT "/tmp")
+set(ATT_PROJECT_NAME "attendant")
 
 set(DEBUG_SUFFIX "")
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

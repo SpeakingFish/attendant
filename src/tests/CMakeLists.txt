@@ -16,7 +16,7 @@ set(SOURCES
 	crash_tests.cpp
 )
 
-kmpx_project_add_executable(${TARGET}
+attendant_project_add_executable(${TARGET}
 	${HEADERS}
 	${SOURCES}
 )
@@ -26,4 +26,4 @@ target_link_libraries(${TARGET}
 	${QT_LIBRARIES}
 )
 
-kmpx_project_install(${TARGET})
+attendant_project_install(${TARGET})

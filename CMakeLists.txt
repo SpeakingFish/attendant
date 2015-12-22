@@ -5,4 +5,4 @@ include(${PROJECT_ROOT}/CMakeScripts/ProjectCommon.cmake)
 
 add_subdirectory(src)
 
-kmpx_project_image()
+attendant_project_image()

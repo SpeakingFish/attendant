@@ -31,7 +31,7 @@ set(SOURCES
 	qgzip.cpp
 )
 
-kmpx_project_add_library(${TARGET}
+attendant_project_add_library(${TARGET}
     SHARED
     ${ALL_HEADERS}
     ${SOURCES}
@@ -39,7 +39,7 @@ kmpx_project_add_library(${TARGET}
 
 target_link_libraries(${TARGET})
 
-kmpx_project_install(${TARGET}
+attendant_project_install(${TARGET}
     common
     HEADERS
 )
